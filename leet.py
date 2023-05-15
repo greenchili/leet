@@ -48,6 +48,8 @@ def main():
     parser = argparse.ArgumentParser(description='Generate Leet speak wordlist.')
     parser.add_argument('-w', '--word', help='Input word')
     parser.add_argument('-s', '--save', help='Save wordlist to file', metavar='FILENAME')
+    parser.add_argument('-p', '--pad', type=int, help='Pad the output to the specified length')
+
     args = parser.parse_args()
 
     if args.word:
@@ -56,6 +58,20 @@ def main():
         user_word = input("Enter a word: ")
 
     leet_wordlist = generate_leet_combinations(user_word)
+    
+     if args.pad:
+        pad_len = args.pad
+        if pad_len <= len(user_word):
+            print("Pad length must be greater than input word length")
+            sys.exit()
+        else:
+            padding = ['!', '$', '#']
+            padding_combinations = [''.join(comb) for comb in itertools.product(padding, repeat=pad_len - len(user_word))]
+            padded_wordlist = []
+            for word in leet_wordlist:
+                for pad in padding_combinations:
+                    padded_wordlist.append(word + pad)
+            leet_wordlist = padded_wordlist
 
     if len(leet_wordlist) > 100000:
         choice = input("The resulting wordlist has over 100,000 words. Do you still want to proceed? (y/n): ")
