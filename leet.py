@@ -59,7 +59,7 @@ def main():
 
     leet_wordlist = generate_leet_combinations(user_word)
     
-     if args.pad:
+    if args.pad:
         pad_len = args.pad
         if pad_len <= len(user_word):
             print("Pad length must be greater than input word length")
