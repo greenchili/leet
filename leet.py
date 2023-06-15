@@ -1,8 +1,8 @@
 import argparse
 import itertools
-import sys 
+import sys
 
-leet_dict = { 
+leet_dict = {
     'a': ['4', '@', 'a', 'A'],
     'b': ['8', 'b', 'B'],
     'c': ['(', '[', '{', 'c', 'C'],
@@ -32,6 +32,17 @@ leet_dict = {
 }
 
 def generate_leet_combinations(word):
+    total_combinations = 1
+    for char in word:
+        char_lower = char.lower()
+        if char_lower in leet_dict:
+            alternatives = leet_dict[char_lower]
+            total_combinations *= len(alternatives)
+
+    if total_combinations > 100000:
+        print("The resulting wordlist would have over 100,000 words. Wordlist generation aborted.")
+        return []
+
     combinations = []
     for char in word:
         char_lower = char.lower()
@@ -58,7 +69,7 @@ def main():
         user_word = input("Enter a word: ")
 
     leet_wordlist = generate_leet_combinations(user_word)
-    
+
     if args.pad:
         pad_len = args.pad
         if pad_len <= len(user_word):
@@ -73,12 +84,6 @@ def main():
                     padded_wordlist.append(word + pad)
             leet_wordlist = padded_wordlist
 
-    if len(leet_wordlist) > 100000:
-        choice = input("The resulting wordlist has over 100,000 words. Do you still want to proceed? (y/n): ")
-        if choice.lower() != 'y':
-            print("Wordlist generation aborted.")
-            sys.exit()
-            
     if args.save:
         filename = args.save
         if not filename:
